@@ -1,0 +1,46 @@
+// console.log(price);
+    // console.log(title);
+    // console.log(description);
+
+
+
+
+    // setGlobalState("modal", "scale-0");
+    // setGlobalState("loading", { show: true, msg: "Uploading IPFS data..." });
+
+    // const formData = new FormData();
+    // formData.append("file", fileUrl);
+    // const metadata = JSON.stringify({
+    //   name: title,
+    //   keyvalues: { price: price, description: description },
+    // });
+    // formData.append("pinataMetadata", metadata);
+    // const options = JSON.stringify({ cidVersion: 0 });
+    // formData.append("pinataOptions", options);
+
+    // try {
+    //   const res = await axios.post(
+    //     "https://api.pinata.cloud/pinning/pinFileToIPFS",
+    //     formData,
+    //     {
+    //       maxBodyLength: "Infinity",
+    //       headers: {
+    //         "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+    //         pinata_api_key: "876f96d717a13c38c251",
+    //         pinata_secret_api_key:
+    //           "e8f069ef36868569842dc969b0288d321477816c11baff0e10a0a4888c32edb4",
+    //       },
+    //     }
+    //   );
+    //   const IpfsHash = res.data.IpfsHash;
+    //   const tokenID = await mintNFT2({
+    //     IpfsHash,
+    //     price,
+    //     title: title,
+    //     description: description,
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    //   setAlert("Minting failed...", "red");
+    // }
+    // setGlobalState("loading", { show: false });
