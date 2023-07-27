@@ -1,0 +1,28 @@
+const new_nft = {
+      IPFS_hash: IPFS_hash,
+      NFT_token_ID: parseInt((value["_hex"]), 16),
+      title: title,
+      price: price,
+      description: description,
+      primary_category: "uncategorized",
+      tags: [],
+      votes: 0,
+      transaction_history: [],
+      creator_metamask_id: `${getGlobalState('connectedAccount')}`,
+      owner_metamask_id: `${getGlobalState('connectedAccount')}`,
+      price_timeline: [],
+      trend_number: Math.floor(Math.random() * 100),
+      image_feature_representation: [],
+      date_created: Date(),
+      media_type: 'image',
+      view_count: 0,
+      comments: [],
+    };
+    console.log("New NFT:", new_nft)
+
+    const online_url = "https://napft-backend.vercel.app/api/nft/"
+    axios.post(online_url, new_nft).then((responce) => {
+      console.log("Success", responce);
+    }).catch((error) => {
+      console.log("Error", error);
+    })

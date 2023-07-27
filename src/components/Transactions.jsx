@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react'
-import { BiTransfer } from 'react-icons/bi'
-import { MdOpenInNew } from 'react-icons/md'
-import { useGlobalState, truncate } from '../store'
+import { useEffect, useState } from 'react';
+import { BiTransfer } from 'react-icons/bi';
+import { MdOpenInNew } from 'react-icons/md';
+import { useGlobalState } from '../store';
+import { truncate } from '../utils/misc_functions';
 
 const Transactions = () => {
-  const [transactions] = useGlobalState('transactions')
-  const [end, setEnd] = useState(3)
-  const [count] = useState(3)
-  const [collection, setCollection] = useState([])
+  const [transactions] = useGlobalState('transactions');
+  const [end, setEnd] = useState(3);
+  const [count] = useState(3);
+  const [collection, setCollection] = useState([]);
 
   const getCollection = () => {
-    return transactions.slice(0, end)
-  }
+    return transactions.slice(0, end);
+  };
 
   useEffect(() => {
-    setCollection(getCollection())
-  }, [transactions, end])
+    setCollection(getCollection());
+  }, [transactions, end]);
 
   return (
     <div className="bg-[#151c25]">
@@ -66,7 +67,7 @@ const Transactions = () => {
         ) : null}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Transactions
+export default Transactions;

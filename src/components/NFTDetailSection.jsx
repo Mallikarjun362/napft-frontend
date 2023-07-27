@@ -1,4 +1,5 @@
 import React from 'react';
+import { getGlobalState, useGlobalState } from '../store';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsEye } from 'react-icons/bs';
 import { IPFS_endpoint } from '../utils/constants';
@@ -44,6 +45,26 @@ const MyChip = React.memo(({ name, data }) => {
     </div>
   );
 });
+
+const BuyButton = ({ NFT }) => {
+  return (
+    <button
+      onClick={() => {
+        // buyNFT(NFT.NFT_token_ID);
+      }}
+      className="buybutton text-[white] mt-3"
+    >
+      Purchase Now
+    </button>
+  );
+};
+const EditButton = ({}) => {
+  return (
+    <button onClick={() => {}} className="buybutton text-[white] mt-3">
+      Edit
+    </button>
+  );
+};
 
 // Main component
 const NFTDetailSection = ({ nftDetail }) => {
@@ -179,6 +200,10 @@ const NFTDetailSection = ({ nftDetail }) => {
           </div>
         </div>
         <br />
+        {nftDetail.section_basic_info.owner_metamask_ID.toLowerCase() ===
+        useGlobalState('connectedAccount')[0].toLowerCase() ? null : (
+          <BuyButton />
+        )}
         <div style={{ fontSize: '20px' }}>
           {nftDetail.section_basic_info.description}
         </div>

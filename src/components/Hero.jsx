@@ -1,11 +1,12 @@
-import Identicon from 'react-identicons'
-import { setGlobalState, useGlobalState, truncate } from '../store'
+import Identicon from 'react-identicons';
+import { setGlobalState, useGlobalState } from '../store';
+import { truncate } from '../utils/misc_functions';
 
 const Hero = () => {
-  const [connectedAccount] = useGlobalState('connectedAccount')
+  const [connectedAccount] = useGlobalState('connectedAccount');
   const onCreatedNFT = () => {
-    setGlobalState('modal', 'scale-100')
-  }
+    setGlobalState('modal', 'scale-100');
+  };
 
   return (
     <div
@@ -76,7 +77,7 @@ const Hero = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

@@ -1,8 +1,8 @@
-import React from "react";
-import "./About.css";
-import Avatar from "../assets/avatar.jpg";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import React from 'react';
+import './About.css';
+import Avatar from '../assets/avatar.jpg';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const About = () => {
   return (
@@ -65,7 +65,7 @@ const About = () => {
 
           <div className="social">
             <a href="https://www.instagram.com/invites/contact/?i=kod6v5d1uzo2&utm_content=pbge72p">
-              <i class="fa-brands fa-instagram"></i>
+              <i className="fa-brands fa-instagram"></i>
             </a>
 
             <a href="#!">

@@ -1,32 +1,33 @@
-import Identicon from "react-identicons";
-import { FaTimes } from "react-icons/fa";
-import { useGlobalState, setGlobalState, truncate, setAlert } from "../store";
-import { buyNFT } from "../utils/blockchain_services.js";
+import Identicon from 'react-identicons';
+import { FaTimes } from 'react-icons/fa';
+import { useGlobalState, setGlobalState, setAlert } from '../store';
+import { truncate } from '../utils/misc_functions';
+import { buyNFT } from '../utils/blockchain_services.js';
 
 const ShowNFT = () => {
-  const [showModal] = useGlobalState("showModal");
-  const [connectedAccount] = useGlobalState("connectedAccount");
-  const [nft] = useGlobalState("nft");
+  const [showModal] = useGlobalState('showModal');
+  const [connectedAccount] = useGlobalState('connectedAccount');
+  const [nft] = useGlobalState('nft');
 
   const onChangePrice = () => {
-    setGlobalState("showModal", "scale-0");
-    setGlobalState("updateModal", "scale-100");
+    setGlobalState('showModal', 'scale-0');
+    setGlobalState('updateModal', 'scale-100');
   };
 
   const handleNFTPurchase = async () => {
-    setGlobalState("showModal", "scale-0");
-    setGlobalState("loading", {
+    setGlobalState('showModal', 'scale-0');
+    setGlobalState('loading', {
       show: true,
-      msg: "Initializing NFT transfer...",
+      msg: 'Initializing NFT transfer...',
     });
 
     try {
       await buyNFT(nft);
-      setAlert("Transfer completed...", "green");
+      setAlert('Transfer completed...', 'green');
       window.location.reload();
     } catch (error) {
-      console.log("Error transfering NFT: ", error);
-      setAlert("Purchase failed...", "red");
+      console.log('Error transfering NFT: ', error);
+      setAlert('Purchase failed...', 'red');
     }
   };
 
@@ -42,7 +43,7 @@ const ShowNFT = () => {
             <p className="font-semibold text-gray-400">Buy NFT</p>
             <button
               type="button"
-              onClick={() => setGlobalState("showModal", "scale-0")}
+              onClick={() => setGlobalState('showModal', 'scale-0')}
               className="border-0 bg-transparent focus:outline-none"
             >
               <FaTimes className="text-gray-400" />
@@ -73,7 +74,7 @@ const ShowNFT = () => {
                 <div className="flex flex-col justify-center items-start">
                   <small className="text-white font-bold">@owner</small>
                   <small className="text-pink-800 font-semibold">
-                    {nft?.owner ? truncate(nft.owner, 4, 4, 11) : "..."}
+                    {nft?.owner ? truncate(nft.owner, 4, 4, 11) : '...'}
                   </small>
                 </div>
               </div>

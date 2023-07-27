@@ -1,9 +1,3 @@
-// console.log(price);
-    // console.log(title);
-    // console.log(description);
-
-
-
 
     // setGlobalState("modal", "scale-0");
     // setGlobalState("loading", { show: true, msg: "Uploading IPFS data..." });

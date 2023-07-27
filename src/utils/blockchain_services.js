@@ -2,10 +2,11 @@
 /// Main
 import Web3 from 'web3';
 import { ethers } from "ethers";
-import { setGlobalState, getGlobalState, setAlert } from '../store';
-import abi from '../abis/NftMarket.json'
+import { setGlobalState, getGlobalState, setAlert } from '../store/index.js';
+// import abi from '../abis/NftMarket.json' assert { type: "json" };
+import abi from '../abis/NftMarket.json';
 import axios from "axios";
-import { CONTRACT_ADDRESS,ALCHEMY_API_KEY } from '../utils/constants';
+import { CONTRACT_ADDRESS, ALCHEMY_API_KEY, main_express_backend_bace_url } from '../utils/constants.js';
 
 // Local utility functions
 
@@ -41,7 +42,7 @@ const getEtheriumContract = async () => {
   const connected_account = getGlobalState('connectedAccount')
   if (connected_account) {
     const web3 = window.web3
-    const networkId = await web3.eth.net.getId()
+    // const networkId = await web3.eth.net.getId()
     const contract = new web3.eth.Contract(abi, CONTRACT_ADDRESS)
     return contract
   } else {
@@ -57,6 +58,7 @@ const connectWallet = async () => {
     if (!ethereum) return alert('Please install Metamask')
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
     setGlobalState('connectedAccount', accounts[0])
+    // console.log("CONNECT WALLET - global connectedAccount set", getGlobalState('connectedAccount'));
   } catch (error) {
     reportError(error)
   }
@@ -166,50 +168,60 @@ const getContract = async () => {
   return web3Contract;
 }
 
-const mintNFT2 = async ({ price, IpfsHash, title = "My NFT title", description = "Some Description...." }) => {
+const mintNFT2 = async ({ price, IPFS_hash, title = "My NFT title", description = "Some Description....", tags = "", JWT, connectedAccount, }) => {
+  // console.log("MINT-NFT-2");
+  // console.log({
+  //   price,
+  //   IPFS_hash: IPFS_hash,
+  //   title: title,
+  //   description: description,
+  //   tags: tags,
+  //   JWT,
+  //   connectedAccount,
+  // });
+  // return;
+  let NFT_token_ID = null;
+  // Start Mint Blockchain
   try {
     const CONTRACT_ADDRESS = '0xA149eae19266e92aC3060DA3827013164417adE1';
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const NFT = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
-    const tx = await NFT.creatToken(IpfsHash, ethers.utils.parseEther(`${price}`))
+    const tx = await NFT.creatToken(IPFS_hash, ethers.utils.parseEther(`${price}`))
     const rc = await tx.wait();
     const event = rc.events.find(event => event.event === 'Transfer');
     const [from, to, value] = event.args;
     // value is basically token id of latest transaction.
-    console.log(from, to, value);
+    // console.log(from, to, value);
+    NFT_token_ID = value;
     // Uploading to the Backend
-    const new_nft = {
-      IPFS_hash: IpfsHash,
-      NFT_token_ID: parseInt((value["_hex"]), 16),
+  } catch (error) {
+    console.log("Error minting to blockchain.", error);
+  }
+  try {
+    let new_nft = {
+      // Primary and Basic Information
+      IPFS_hash: IPFS_hash,
+      NFT_token_ID: parseInt((NFT_token_ID["_hex"]), 16),
       title: title,
       price: price,
       description: description,
-      primary_category: "uncategorized",
-      tags: [],
-      votes: 0,
-      transaction_history: [],
-      creator_metamask_id: `${getGlobalState('connectedAccount')}`,
-      owner_metamask_id: `${getGlobalState('connectedAccount')}`,
-      price_timeline: [],
-      trend_number: Math.floor(Math.random() * 100),
-      image_feature_representation: [],
+      tags: tags === "" ? [] : tags.split(","),
+      creator_metamask_ID: `${getGlobalState('connectedAccount')}`,
+      owner_metamask_ID: `${getGlobalState('connectedAccount')}`,
       date_created: Date(),
+      // Secondary Information
+      primary_category: "uncategorized",
       media_type: 'image',
-      view_count: 0,
-      comments: [],
     };
     console.log("New NFT:", new_nft)
-
-    const online_url = "https://napft-backend.vercel.app/api/nft/"
-    axios.post(online_url, new_nft).then((responce) => {
-      console.log("Success", responce);
-    }).catch((error) => {
-      console.log("Error", error);
-    })
-    return value
+    const nft_create_end_point = `${main_express_backend_bace_url}/api/nft/create/`
+    axios.post(nft_create_end_point, { nft: new_nft, JWT, user_metamask_ID: connectedAccount })
+      .then((responce) => console.log("Success Uploading to Backend.", responce))
+      .catch((error) => console.log("Error Uploding to backend", error))
+    return NFT_token_ID
   } catch (error) {
-    console.log(error);
+    console.log("Error Uploding to backend", error)
   }
 }
 
@@ -230,21 +242,6 @@ const buyNFT = async (tokenId) => {
 
 
 
-// AUTHENTICATION RELATED
-/// Signing a Message using Metamask.
-const signMessage = async (message, account) => {
-  const web3 = new Web3(window.ethereum);
-  return (await web3.eth.personal.sign(message, account));
-}
-/// Complete Authentication using Metamask with ExpressJS Backend.
-const authenticate = async () => {
-  let account = getGlobalState("connectedAccount");
-  if (account !== "") {
-    const signature = signMessage("Hello", account);
-    console.log(signature);
-  }
-}
-
 
 
 
@@ -258,8 +255,6 @@ const authenticate = async () => {
 
 
 export {
-  signMessage,
-  authenticate,
   getAllNFTs,
   connectWallet,
   mintNFT2,
@@ -268,5 +263,6 @@ export {
   isWallectConnected,
   getContract,
   getAlchemyContract,
+  getEtheriumContract,
   get_NFT_details_from_MongoDB,
 }

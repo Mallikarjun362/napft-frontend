@@ -8,6 +8,7 @@ import axios from 'axios';
 import {
   useGlobalState,
   setGlobalState,
+  getGlobalState,
   setLoadingMsg,
   setAlert,
 } from '../store';
@@ -65,7 +66,66 @@ const CreateNFT = () => {
   /// 4. (Handle Submission) Submit button onCLick Event Handler
   const handle_submission = async (e) => {
     e.preventDefault();
-    if (!title || !price || !description) return;
+    const input = {
+      title: title,
+      price: price,
+      description: description,
+      tags: tags,
+      fileUrl: fileUrl,
+      imgBase64: imgBase64,
+    };
+    // console.log(input);
+    if (!title || !price) return;
+    setGlobalState('modal', 'scale-0');
+    // setGlobalState('loading', { show: true, msg: 'Uploading IPFS data...' });
+    // Start Pinata
+    const formData = new FormData();
+    const pinata_metadata = JSON.stringify({
+      name: title,
+      keyvalues: { price: price, description: description },
+    });
+    const pinata_options = JSON.stringify({ cidVersion: 0 });
+    formData.append('file', fileUrl);
+    formData.append('pinataMetadata', pinata_metadata);
+    formData.append('pinataOptions', pinata_options);
+    try {
+      const pinata_response = await axios.post(
+        'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        formData,
+        {
+          maxBodyLength: 'Infinity',
+          headers: {
+            'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+            pinata_api_key: '876f96d717a13c38c251',
+            pinata_secret_api_key:
+              'e8f069ef36868569842dc969b0288d321477816c11baff0e10a0a4888c32edb4',
+          },
+        }
+      );
+      input.IPFS_hash = pinata_response.data.IpfsHash;
+    } catch (error) {
+      console.log(error);
+      setAlert('Uploading to pinata Failed', 'red');
+    }
+    const connectedAccount = getGlobalState('connectedAccount');
+    const JWT = getGlobalState('JWT');
+    if ((connectedAccount === '') | (JWT === '')) {
+      return alert('Connect metamask');
+    }
+    // End Pinata
+    // Start Mint Blockchain
+
+    const tokenID = await mintNFT2({
+      price,
+      IPFS_hash: input.IPFS_hash,
+      title: title,
+      description: description,
+      tags: tags,
+      JWT,
+      connectedAccount,
+    });
+    // End Mint Blockchain
+    setGlobalState('loading', { show: false });
   };
 
   return (

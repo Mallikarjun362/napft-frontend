@@ -7,12 +7,15 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   showModal: "scale-0",
   alert: { show: false, msg: "", color: "" },
   loading: { show: false, msg: "" },
-  connectedAccount: "",
   nft: null,
-  nfts: [],
   transactions: [],
   contract: null,
+  nfts: [],
   nftDetailsList: [],
+  // STANDARD GLOBAL APPLICATION STATE
+  nft_list: [],
+  connectedAccount: "",
+  JWT: "",
 });
 
 // Functions
@@ -29,23 +32,12 @@ const setLoadingMsg = (msg) => {
   setGlobalState("loading", { ...loading, msg });
 };
 
-const truncate = (text, startChars, endChars, maxLength) => {
-  if (text.length > maxLength) {
-    var start = text.substring(0, startChars);
-    var end = text.substring(text.length - endChars, text.length);
-    while (start.length + end.length < maxLength) {
-      start = start + ".";
-    }
-    return start + end;
-  }
-  return text;
-};
 
 export {
   useGlobalState,
   setGlobalState,
   getGlobalState,
+
   setAlert,
   setLoadingMsg,
-  truncate,
 };
