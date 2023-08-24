@@ -1,14 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getGlobalState, useGlobalState } from '../store';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsEye } from 'react-icons/bs';
-import { IPFS_endpoint } from '../utils/constants';
+import {
+  IPFS_endpoint,
+  main_express_backend_bace_url,
+} from '../utils/constants';
+import axios from 'axios';
 
 const MyLikeButton = ({
   likes_count = 0,
   is_liked_bool = false,
-  like_function = () => {},
+  NFT_token_ID,
+  JWT,
+  updatePageData,
+  user_metamask_ID,
 }) => {
+  const [liked, toggleLiked] = useState(is_liked_bool);
+  const toggleLike = (e) => {
+    // console.log(JWT);
+    if (JWT === '') {
+      JWT = getGlobalState('JWT');
+    }
+    if ((JWT === '') | (user_metamask_ID[0] === '')) {
+      // console.log('JWT:', JWT);
+      // console.log('Account:', user_metamask_ID[0]);
+      return;
+    }
+    axios
+      .post(main_express_backend_bace_url + '/api/nft/like', {
+        user_metamask_ID: user_metamask_ID[0],
+        NFT_token_ID,
+        JWT,
+      })
+      .then(() => {
+        if (is_liked_bool) {
+          // alert('Successfully unliked the NFT');
+        } else {
+          // alert('Successfully liked the NFT');
+        }
+        updatePageData().then(() => toggleLiked((pre) => !pre));
+        // window.location.reload();
+      })
+      .catch(() => alert('Unsuccessful'));
+  };
   return (
     <button
       className="likeButton"
@@ -21,10 +56,10 @@ const MyLikeButton = ({
         padding: '2px 15px',
         borderRadius: '100px',
       }}
-      onClick={like_function}
+      onClick={() => toggleLike()}
     >
       {likes_count}
-      <span>{is_liked_bool ? <AiFillHeart /> : <AiOutlineHeart />}</span>
+      <span>{liked ? <AiFillHeart /> : <AiOutlineHeart />}</span>
     </button>
   );
 };
@@ -66,8 +101,9 @@ const EditButton = ({}) => {
   );
 };
 
-// Main component
-const NFTDetailSection = ({ nftDetail }) => {
+// Main component -----------------------------------------------------------------------------------------------
+const NFTDetailSection = ({ nftDetail, JWT, updatePageData }) => {
+  // console.log(nftDetail.is_liked);
   const [imageSrc, setImageSrc] = React.useState(
     `${IPFS_endpoint}/${nftDetail.IPFS_hash}`
   );
@@ -86,6 +122,7 @@ const NFTDetailSection = ({ nftDetail }) => {
   nftDetail.section_price_info.price_timeline.sort((a, b) => {
     return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
   });
+  const user_metamask_ID = useGlobalState('connectedAccount');
   const current_price = nftDetail.section_price_info.price_timeline[0].price;
   return (
     <div
@@ -139,7 +176,14 @@ const NFTDetailSection = ({ nftDetail }) => {
           <h1 style={{ fontSize: '40px', fontWeight: 'bold' }}>
             {nftDetail.section_basic_info.title}
           </h1>
-          <MyLikeButton />
+          <MyLikeButton
+            NFT_token_ID={nftDetail.NFT_token_ID}
+            user_metamask_ID={user_metamask_ID}
+            is_liked_bool={nftDetail.is_liked}
+            likes_count={nftDetail.section_additional_info.votes_count}
+            updatePageData={updatePageData}
+            JWT={JWT}
+          />
         </div>
         <hr style={{ borderWidth: '1px', borderColor: 'white' }} />
         <br />
@@ -169,7 +213,7 @@ const NFTDetailSection = ({ nftDetail }) => {
                 Views <BsEye />
               </span>
             }
-            data={nftDetail.section_additional_info.votes_count}
+            data={nftDetail.section_additional_info.total_view_count}
           />
         </div>
         <br />

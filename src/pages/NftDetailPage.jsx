@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { connectWallet } from '../utils/blockchain_services.js';
 // Constants
 import { main_express_backend_bace_url } from '../utils/constants.js';
 // Components
@@ -172,13 +173,17 @@ const NftDetailPage = () => {
   const [nftDetail, setNftDetail] = useState({});
   const [rec, setRec] = useState([]);
   const connectedAccount = useGlobalState('connectedAccount')[0];
-  const updatePageData = () => {
+  const JWT = useGlobalState('JWT')[0];
+  const updatePageData = async () => {
     const target_endpoint =
       main_express_backend_bace_url + '/api/nft/nft_detail';
     try {
-      axios
+      // console.log('NFTDetailPage.JSX:180', JWT, connectedAccount);
+      await axios
         .post(target_endpoint, {
           NFT_token_ID: tokenid,
+          // JWT,
+          // user_metamask_ID: connectedAccount,
         })
         .then((response) => {
           // console.log(response.data);
@@ -195,13 +200,16 @@ const NftDetailPage = () => {
     return () => {};
   };
   // componentDidMount behaviour
-  useEffect(() => {
+  useEffect(async () => {
+    await connectWallet();
     const target_endpoint =
       main_express_backend_bace_url + '/api/nft/nft_detail';
     try {
       axios
         .post(target_endpoint, {
           NFT_token_ID: tokenid,
+          JWT: getGlobalState('JWT'),
+          user_metamask_ID: getGlobalState('connectedAccount'),
         })
         .then((response) => {
           // console.log(response.data);
@@ -219,9 +227,12 @@ const NftDetailPage = () => {
   }, []);
   if (!(Object.keys(nftDetail).length > 0)) {
     return (
-      <center>
-        <h1>Loading</h1>
-      </center>
+      <div className="gradient-bg-hero" style={{ minHeight: '100vh' }}>
+        <div className="">
+          <Header />
+        </div>
+        <center className="pt-[30vh] text-[50px] text-white">Loading...</center>
+      </div>
     );
   } else {
     return (
@@ -238,7 +249,11 @@ const NftDetailPage = () => {
               gap: '30px',
             }}
           >
-            <NFTDetailSection nftDetail={nftDetail} />
+            <NFTDetailSection
+              nftDetail={nftDetail}
+              JWT={JWT}
+              updatePageData={updatePageData}
+            />
             {nftDetail.section_basic_info.owner_metamask_ID.toLowerCase() ===
             connectedAccount.toLowerCase() ? (
               <NFTEditForm NFT={nftDetail} updatePageData={updatePageData} />

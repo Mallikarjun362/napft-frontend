@@ -12,7 +12,7 @@ import {
   setLoadingMsg,
   setAlert,
 } from '../store';
-import { mintNFT2 } from '../utils/blockchain_services.js';
+import { connectWallet, mintNFT2 } from '../utils/blockchain_services.js';
 
 // Main Component
 /*
@@ -63,8 +63,11 @@ const CreateNFT = () => {
     setPrice('');
     setDescription('');
   };
+  const connectedAccount = useGlobalState('connectedAccount')[0];
+  const JWT = useGlobalState('JWT')[0];
   /// 4. (Handle Submission) Submit button onCLick Event Handler
   const handle_submission = async (e) => {
+    await connectWallet();
     e.preventDefault();
     const input = {
       title: title,
@@ -107,8 +110,7 @@ const CreateNFT = () => {
       console.log(error);
       setAlert('Uploading to pinata Failed', 'red');
     }
-    const connectedAccount = getGlobalState('connectedAccount');
-    const JWT = getGlobalState('JWT');
+
     if ((connectedAccount === '') | (JWT === '')) {
       return alert('Connect metamask');
     }

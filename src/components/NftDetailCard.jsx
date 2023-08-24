@@ -6,6 +6,7 @@ import { buyNFT } from '../utils/blockchain_services';
 import { check_valid_IPFS_hach } from '../utils/misc_functions.js'; // Just a fucntion that checks validity of an ipfs hash using basic criteria.
 import nft_placeholder from '../assets/nft_placeholder.jpg'; // Just an image
 import ToolTip from './ToolTip';
+import { Link } from 'react-router-dom';
 // import { IpfsImage } from "react-ipfs-image";
 
 // Local utility functiond
@@ -78,7 +79,7 @@ const NftDetailCard = ({ NFT }) => {
           <ToolTip
             text={NFT.section_basic_info.title}
             body={
-              <a href={`./nft-detail-page/${NFT.NFT_token_ID}`}>
+              <Link to={`/nft-detail-page/${NFT.NFT_token_ID}`}>
                 <h3
                   style={{
                     fontSize: '35px',
@@ -91,7 +92,7 @@ const NftDetailCard = ({ NFT }) => {
                 >
                   {NFT.section_basic_info.title}
                 </h3>
-              </a>
+              </Link>
             }
           />
 

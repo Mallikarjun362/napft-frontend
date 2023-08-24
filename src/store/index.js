@@ -13,6 +13,8 @@ const { setGlobalState, useGlobalState, getGlobalState } = createGlobalState({
   nfts: [],
   nftDetailsList: [],
   // STANDARD GLOBAL APPLICATION STATE
+  user_liked_nfts: [],
+  user_owned_nfts: [],
   nft_list: [],
   connectedAccount: "",
   JWT: "",

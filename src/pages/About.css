@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 #home {
   width: 100%;
@@ -62,7 +62,7 @@
 }
 
 .home-img::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: -10px 140px;
   background: linear-gradient(315deg, #00ccff, #d400d4);
@@ -84,7 +84,7 @@
 }
 
 .home-img::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 6px;
   background: rgb(22, 32, 82);
@@ -178,4 +178,11 @@
   .home-text {
     max-width: none;
   }
+}
+
+.mygrid {
+  /* padding: 0px 180px; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap: 15px;
 }

@@ -16,8 +16,8 @@ async function upload_to_mongo({ IpfsHash, creator, owner, price, token_id_in_de
         tags: [],
         votes: 0,
         transaction_history: [],
-        creator_metamask_id: creator,
-        owner_metamask_id: owner,
+        creator_metamask_ID: creator,
+        owner_metamask_ID: owner,
         price_timeline: [],
         trend_number: Math.floor(Math.random() * 100),
         image_feature_representation: [],
@@ -28,23 +28,25 @@ async function upload_to_mongo({ IpfsHash, creator, owner, price, token_id_in_de
     };
     // console.log("New NFT:", new_nft)
 
-    const online_url = "https://napft-backend.vercel.app/api/nft/"
-    await axios.post(online_url, new_nft).then((responce) => {
+    const online_url = "http://localhost:4000/api/nft/create"
+    await axios.post(online_url, { nft: new_nft }).then((responce) => {
         console.log("Success ", token_id_in_dec, responce);
     }).catch((error) => {
         console.log("Error", error);
     })
 }
 
-async function hello_mongo() {
+// MAIN
+async function manually_upload_from_blockchain() {
     const val = await getAlchemyContract()
-    for (let index = 6; index <= 47; index++) {
+    const lst = [61, 62]
+    for (let index of lst) {
         try {
             let nftDetail = await val.GetNFTDetails(index);
             const { IpfsHash, creator, owner, price } = nftDetail;
             upload_to_mongo({ IpfsHash, creator, owner, price, token_id_in_dec: index })
         } catch (err) {
-            console.log("ERROR", err);
+            console.log("ERROR AXIOS", err);
         }
     }
 }
@@ -77,4 +79,5 @@ async function getHighestNftTokenNumber() {
     // const nfts = await contract.methods.getAllNFTs().call();
     // console.log(nfts);
 }
-getHighestNftTokenNumber();
+// getHighestNftTokenNumber();
+manually_upload_from_blockchain();

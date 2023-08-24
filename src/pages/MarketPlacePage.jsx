@@ -57,7 +57,7 @@ const MarketPlacePage = (props) => {
             ))}
           </div>
         ) : (
-          <center className="pt-[200px] pb-[200px] text-[100px]">
+          <center className="pt-[200px] pb-[200px] text-[50px] text-white">
             Loading...
           </center>
         )}

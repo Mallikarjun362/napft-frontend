@@ -50,7 +50,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
       <div
         className="shadow-xl shadow-black md:w-2/5 w-full 
       mt-10 md:mt-0 rounded-md overflow-hidden bg-gray-800"
