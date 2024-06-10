@@ -1,17 +1,23 @@
-import Logo from '../assets/logo.png';
-import { connectWallet } from '../utils/blockchain_services';
-import { useGlobalState } from '../store';
-import { onSiteLoad, truncate } from '../utils/misc_functions';
+// LIBRARY IMPORTS
 import { Link } from 'react-router-dom';
-import { connectToBackend } from '../utils/authentication';
 import { useEffect } from 'react';
 
+// APPLICATION IMPORTS
+import { onSiteLoad, truncate } from '../utils/misc_functions';
+import { connectWallet } from '../utils/blockchain_services';
+import { connectToBackend } from '../utils/authentication';
+import { useGlobalState } from '../store';
+import Logo from '../assets/logo.png';
+
 const Header = () => {
+
   const [connectedAccount] = useGlobalState('connectedAccount');
   const [JWT] = useGlobalState('JWT');
+
   useEffect(() => {
     onSiteLoad();
   }, []);
+
   const btn1 = connectedAccount ? (
     <button className="  text-white bg-green-500 hover:bg-green-600 md:text-s p-2 rounded-tl-full rounded-bl-full cursor-pointer">
       {truncate(connectedAccount, 6, 4, 15)}
@@ -27,19 +33,20 @@ const Header = () => {
 
   const btn2 = JWT ? (
     <button
-      className="  text-white bg-green-500 hover:bg-green-600 md:text-s p-2 rounded-tr-full rounded-br-full"
+      className="text-white bg-green-500 hover:bg-green-600 md:text-s p-2 rounded-tr-full rounded-br-full"
       onClick={connectToBackend}
     >
       Connected
     </button>
   ) : (
     <button
-      className="  text-white bg-[#e32970] hover:bg-[#bd255f] md:text-s p-2 rounded-tr-full rounded-br-full cursor-pointer"
+      className="text-white bg-[#e32970] hover:bg-[#bd255f] md:text-s p-2 rounded-tr-full rounded-br-full cursor-pointer"
       onClick={connectToBackend}
     >
       Connect To Napft
     </button>
   );
+
   return (
     <nav className="w-4/5 flex md:justify-center justify-between items-center py-4 mx-auto gap-5">
       <div className="md:flex-[0.5] flex-initial justify-center items-center">

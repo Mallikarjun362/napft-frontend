@@ -1,31 +1,35 @@
+// LIBRARY IMPORTS
 import { useEffect, useState } from 'react';
-import { getAllNFTs, isWallectConnected } from './utils/blockchain_services.js';
-import Alert from './components/Alert';
-import Artworks from './components/Artworks';
-import CreateNFT from './components/CreateNFT';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import Loading from './components/Loading';
-import ShowNFT from './components/ShowNFT';
+import axios from 'axios';
+
+// APPLICATION IMPORTS
+// UI COMPONENTS IMPORTS
+import NftDetailCard from './components/NftDetailCard.jsx';
 import Transactions from './components/Transactions';
 import UpdateNFT from './components/UpdateNFT';
-import { onSiteLoad } from './utils/misc_functions';
-import { getAlchemyContract } from './utils/blockchain_services.js'; // Returns the contract
+import CreateNFT from './components/CreateNFT';
+import Artworks from './components/Artworks';
+import Loading from './components/Loading';
+import ShowNFT from './components/ShowNFT';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Alert from './components/Alert';
+import Hero from './components/Hero';
+
+// UTILITIES IMPORTS
+import { getAllNFTs, isWallectConnected } from './utils/blockchain_services.js';
 import { main_express_backend_bace_url } from './utils/constants.js';
-import axios from 'axios';
-import NftDetailCard from './components/NftDetailCard.jsx';
-// import About from './components/About'
+import { getAlchemyContract } from './utils/blockchain_services.js';
+import { onSiteLoad } from './utils/misc_functions';
 
 const App = () => {
   const [recentNfts, setRecentNfts] = useState([]);
-  useEffect(async () => {
-    // A function to load all nfts from backend
-    async function load_nfts() {
-      const alchemy_contract = await getAlchemyContract(); // Returns the contract
-      const no_of_nfts = parseInt(await alchemy_contract.GetCurrentToken(), 16); // return Numnber of NFTs created
-      const api_url = main_express_backend_bace_url + '/api/nft/recent_nfts'; // Base Backend API url
-      // Retrives and stores the NFTs details
+
+  useEffect(() => {
+    (async function () {
+      const alchemy_contract = await getAlchemyContract();
+      const no_of_nfts = parseInt(await alchemy_contract.GetCurrentToken(), 16);
+      const api_url = main_express_backend_bace_url + '/api/nft/recent_nfts';
       // if (recentNfts.length > 0) {
       //   return;
       // }
@@ -39,27 +43,27 @@ const App = () => {
         .catch((error) => {
           console.log('Error Loading NFTs from Backend');
         });
-    }
-    // calling the load_nft function
-    await load_nfts();
-  }, []); // Empty array to indicate no dependecies. only runs once
+    })();
+  }, []);
+
   // useEffect(async () => {
   //   await isWallectConnected();
   //   await getAllNFTs();
   // }, []);
 
   return (
-    <div className="min-h-screen">
-      <div className="gradient-bg-hero">
+    <div className="gradient-bg-hero" style={{ minHeight: '100vh' }}>
+      <div>
         <Header />
         <Hero />
+        {/* CODE TO SHOW RECENT NFTS */}
         <div
           style={{
-            display: 'flex',
             justifyContent: 'center',
-            width: '100%',
             flexDirection: 'column',
             alignItems: 'center',
+            display: 'flex',
+            width: '100%',
           }}
         >
           <div className="w-4/5">
@@ -73,12 +77,14 @@ const App = () => {
           </div>
         </div>
       </div>
-      <Artworks />
+      
+      {/* DEAD CODE */}
+      {/* <Artworks />
       <Transactions />
       <CreateNFT />
       <ShowNFT />
-      <UpdateNFT />
-      {/* <About /> */}
+      <UpdateNFT /> */}
+
       <Footer />
       <Alert />
       <Loading />

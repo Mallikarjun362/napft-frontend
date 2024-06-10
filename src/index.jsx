@@ -1,13 +1,17 @@
-import React from 'react';
+// LIBRARY IMPORTS
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
-import './index.css';
-import App from './App';
-import About from './pages/About';
-import MarketPlacePage from './pages/MarketPlacePage';
-import PersonalPage from './pages/PersonalPage';
-import NftDetailPage from './pages/NftDetailPage';
+import React from 'react';
 
+// APPLICATION IMPORTS
+import MarketPlacePage from './pages/MarketPlacePage';
+import NftDetailPage from './pages/NftDetailPage';
+import PersonalPage from './pages/PersonalPage';
+import About from './pages/About';
+import App from './App';
+import './index.css';
+
+// PRIMARY APPLICATION ROUTE HANDLER
 const router = createBrowserRouter([
   {
     path: '/',
@@ -30,6 +34,7 @@ const router = createBrowserRouter([
     element: <NftDetailPage />,
   },
 ]);
+
 ReactDOM.render(
   <RouterProvider router={router} />,
   document.getElementById('root')
