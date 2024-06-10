@@ -1,5 +1,5 @@
 # Napft : NFT Trading platform
-![Demo](./screenshots/1_landing_page.jpg)
+![Demo](./screenshots/landing_page_close_up.png)
 
 # Primary Technology Stack :
 1. **react** `^17.0.2` : Primary Frontend Library
@@ -17,7 +17,13 @@
 1. **Deployment** : [https://napft.vercel.app](https://napft.vercel.app/)
 
 # Demo
-![Demo](./screenshots/2_nft_creation.png)
-![Demo](./screenshots/3_transaction.png)
-![Demo](./screenshots/4_market_place.png)
-![Demo](./screenshots/5_nft_details.png)
+### NFT creation form
+![Demo](./screenshots/create_nft_mini.png)
+### Metamask transaction
+![Demo](./screenshots/metamask_transaction.png)
+### Market place page
+![Demo](./screenshots/marketplace_page_wide.png)
+### NFT details page
+![Demo](./screenshots/nft_details_page_wide.png)
+### User profile page
+![Demo](./screenshots/user_profile_page_wide.png)
